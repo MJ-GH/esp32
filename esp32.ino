@@ -12,6 +12,7 @@ const char* password = "MilleErHurtig";
 AsyncWebServer server(80);                    // Creates an AsyncWebServer object on port 80.
 
 int LED_BUILTIN = 2;
+//bool fahrenheit = false;
 
 void setup()
 {
@@ -34,11 +35,15 @@ void setup()
     req->send(200, "text/plain", String(readTemp()));
   });
 
+  //  server.on("/change", HTTP_GET, [](AsyncWebServerRequest * req) {
+  //    req->send(200, "text/plain", changeDegrees());
+  //  });
+
   // Connect to WiFi network with SSID and password
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
+  WiFi.begin(ssid, password);                 // Connecting to home WiFi
+  while (WiFi.status() != WL_CONNECTED) {     // While it's trying to connect do this:
     delay(500);
     Serial.print(".");
     digitalWrite(LED_BUILTIN, HIGH);
@@ -50,7 +55,7 @@ void setup()
   Serial.println("");
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+  Serial.println(WiFi.localIP());             // Print IP
   Serial.println();
 
   server.begin();                             // Starts the server
@@ -85,5 +90,20 @@ float readTemp() {
   if (secondByte)                             // If there is a 0.5 deg. difference
     temp += 0.5;
 
+  //  if (fahrenheit) {
+  //    temp = temp * 1.8 + 32;
+  //  }
+
   return temp;
 }
+
+//String changeDegrees() {
+//  if (fahrenheit == false) {
+//    fahrenheit = true;
+//    return String(fahrenheit);
+//  }
+//  else {
+//    fahrenheit = false;
+//    return String(fahrenheit);
+//  }
+//}
