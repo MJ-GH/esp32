@@ -6,8 +6,8 @@
 
 #define ds1621 0x90 >> 1
 
-const char* ssid = "A34Ybtt6";                // Only supports 2.4 GHz WiFi
-const char* password = "MilleErHurtig";
+const char* ssid = "ESP32 SSID";              // Only supports 2.4 GHz WiFi
+const char* password = "password";
 
 AsyncWebServer server(80);                    // Creates an AsyncWebServer object on port 80.
 
@@ -28,8 +28,8 @@ void setup()
   Wire.write(0xEE);                           // Start conversions
   Wire.endTransmission();
 
-  //WiFi.mode(WIFI_AP);                         // Configures the ESP32 as a soft Access Point, "soft" because it doesn't connect further to a wired network like a router.
-  //WiFi.softAP(ssid, password);                // "ssid" is the name of the ESP32, "password" is the password required to connect to the AP. Set to NULL if no password is required.
+  WiFi.mode(WIFI_AP);                         // Configures the ESP32 as a soft Access Point, "soft" because it doesn't connect further to a wired network like a router.
+  WiFi.softAP(ssid, password);                // "ssid" is the name of the ESP32, "password" is the password required to connect to the AP. Set to NULL if no password is required.
 
   server.on("/temp", HTTP_GET, [](AsyncWebServerRequest * req) {
     req->send(200, "text/plain", String(readTemp()));
@@ -40,22 +40,23 @@ void setup()
   //  });
 
   // Connect to WiFi network with SSID and password
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-  WiFi.begin(ssid, password);                 // Connecting to home WiFi
-  while (WiFi.status() != WL_CONNECTED) {     // While it's trying to connect do this:
-    delay(500);
-    Serial.print(".");
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(20);
-    digitalWrite(LED_BUILTIN, LOW);
-  }
+  //  Serial.print("Connecting to ");
+  //  Serial.println(ssid);
+  //  WiFi.begin(ssid, username, password);       // Connecting to home WiFi
+  //  while (WiFi.status() != WL_CONNECTED) {     // While it's trying to connect do this:
+  //    delay(500);
+  //    Serial.print(".");
+  //    digitalWrite(LED_BUILTIN, HIGH);
+  //    delay(20);
+  //    digitalWrite(LED_BUILTIN, LOW);
+  //  }
 
   // Print local IP address and start web server
   Serial.println("");
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());             // Print IP
+  //  Serial.println(WiFi.localIP());             // Print local ip when connecting to router
+  Serial.println(WiFi.softAPIP());            // Print AP IP when configured as soft ap
   Serial.println();
 
   server.begin();                             // Starts the server
